@@ -113,19 +113,11 @@ int ConvertResolution(int d, int src, int dst = 1300) {
   return static_cast<int>(d * dst / src);
 }
 
-}  // namespace
-
-void setup() {
-  Serial.begin(115200);
-  SetupSerial();
-  Mouse.begin();
-
+void SetupButtons() {
   ::pinMode(9, INPUT_PULLUP);
   ::pinMode(16, INPUT_PULLUP);
   ::pinMode(10, INPUT_PULLUP);
 }
-
-namespace {
 
 void ScanButton(uint8_t pin, uint8_t button) {
   if (::digitalRead(pin) == LOW) {
@@ -139,7 +131,19 @@ void ScanButton(uint8_t pin, uint8_t button) {
   }
 }
 
+void ScanButtons() {
+  ScanButton(9, MOUSE_LEFT);
+  ScanButton(16, MOUSE_RIGHT);
+}
+
 }  // namespace
+
+void setup() {
+  Serial.begin(115200);
+  SetupSerial();
+  SetupButtons();
+  Mouse.begin();
+}
 
 void loop() {
   auto st = ReadRegister(0x02);
@@ -158,9 +162,6 @@ void loop() {
                 0);
     }
   }
-
-  ScanButton(9, MOUSE_LEFT);
-  ScanButton(16, MOUSE_RIGHT);
-
+  ScanButtons();
   ::delay(2);
 }
