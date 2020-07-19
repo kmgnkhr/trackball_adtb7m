@@ -4,6 +4,7 @@ Copyright 2020 kmgnkhr
 
 SDIO -> D15
 SCLK -> D14
+TactSw -> D9, D16, D10
 */
 
 #include "Mouse.h"
@@ -118,7 +119,27 @@ void setup() {
   Serial.begin(115200);
   SetupSerial();
   Mouse.begin();
+
+  ::pinMode(9, INPUT_PULLUP);
+  ::pinMode(16, INPUT_PULLUP);
+  ::pinMode(10, INPUT_PULLUP);
 }
+
+namespace {
+
+void ScanButton(uint8_t pin, uint8_t button) {
+  if (::digitalRead(pin) == LOW) {
+    if (!Mouse.isPressed(button)) {
+      Mouse.press(button);
+    }
+  } else {
+    if (Mouse.isPressed(button)) {
+      Mouse.release(button);
+    }
+  }
+}
+
+}  // namespace
 
 void loop() {
   auto st = ReadRegister(0x02);
@@ -129,9 +150,17 @@ void loop() {
     auto res = st & 0x7;
     auto dpi = DPI(res);
 
-    Mouse.move(ConvertResolution(x, dpi),
-               ConvertResolution(y, dpi),
-               0);
+    if (::digitalRead(10) == LOW) {
+      Mouse.move(0, 0, ConvertResolution(y, dpi, 150));
+    } else {
+      Mouse.move(ConvertResolution(x, dpi),
+                ConvertResolution(y, dpi),
+                0);
+    }
   }
+
+  ScanButton(9, MOUSE_LEFT);
+  ScanButton(16, MOUSE_RIGHT);
+
   ::delay(2);
 }

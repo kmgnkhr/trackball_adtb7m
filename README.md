@@ -17,6 +17,14 @@ __!!注意!! レベル変換して接続してください__
 |GND|GND|
 |VDD|VCC|
 
+TactSw
+
+|Button|ProMicro|
+|--|--|
+|Left|D9|
+|Right|D16|
+|Wheel|D10|
+
 ## 資料
 
 “ADTB7M” オプティカルトラックボールモジュール  
