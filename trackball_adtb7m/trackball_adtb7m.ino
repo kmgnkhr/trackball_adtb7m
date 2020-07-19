@@ -2,8 +2,8 @@
 Sample sketch for ADTB7M (https://bit-trade-one.co.jp/selfmadekb/adtb7m/)
 Copyright 2020 kmgnkhr
 
-SDIO -> D10
-SCLK -> D16
+SDIO -> D15
+SCLK -> D14
 */
 
 #include "Mouse.h"
@@ -18,20 +18,20 @@ void Pulse() {
 void SCLK_Direction(uint8_t mode) {
   switch (mode) {
     case OUTPUT:
-      DDRB |= _BV(2);
+      DDRB |= _BV(1);
       break;
     case INPUT:
-      // DDRB &= ~_BV(2);
-      // PORTB &= ~_BV(2);
+      // DDRB &= ~_BV(1);
+      // PORTB &= ~_BV(1);
       break;
   }
 }
 
 void SCLK(uint8_t val, bool wait = true) {
   if (val == LOW) {
-    PORTB &= ~_BV(2);
+    PORTB &= ~_BV(1);
   } else {
-    PORTB |= _BV(2);
+    PORTB |= _BV(1);
   }
   if (wait) {
     Pulse();
@@ -41,25 +41,25 @@ void SCLK(uint8_t val, bool wait = true) {
 void SDIO_Direction(uint8_t mode) {
   switch (mode) {
     case OUTPUT:
-      DDRB |= _BV(6);
+      DDRB |= _BV(3);
       break;
     case INPUT:
-      DDRB &= ~_BV(6);
-      PORTB &= ~_BV(6);
+      DDRB &= ~_BV(3);
+      PORTB &= ~_BV(3);
       break;
   }
 }
 
 void SDIO(uint8_t val) {
   if (val == LOW) {
-    PORTB &= ~_BV(6);
+    PORTB &= ~_BV(3);
   } else {
-    PORTB |= _BV(6);
+    PORTB |= _BV(3);
   }
 }
 
 uint8_t SDIO() {
-  return (PINB & _BV(6)) ? HIGH : LOW;
+  return (PINB & _BV(3)) ? HIGH : LOW;
 }
 
 void SetupSerial() {

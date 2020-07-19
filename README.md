@@ -11,8 +11,8 @@ __!!注意!! レベル変換して接続してください__
 
 |ADTB7M|ProMicro|
 |--|--|
-|SCLK|D16|
-|SDIO|D10|
+|SCLK|D14|
+|SDIO|D15|
 |MOTSWK|N.C.|
 |GND|GND|
 |VDD|VCC|
